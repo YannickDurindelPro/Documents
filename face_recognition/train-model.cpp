@@ -4,50 +4,77 @@
 
 int main() {
     // Define the path to the directory containing the dataset images
-    std::string datasetPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset/s0/";
+    std::string datasetPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset/me/";
 
     // Array of image names
     std::string imageNames[] = {
-        "0000_02176.pgm", "0000_02421.pgm", "0000_02561.pgm", "0000_02774.pgm", "0000_03524.pgm",
-        "0000_02179.pgm", "0000_02422.pgm", "0000_02569.pgm", "0000_02775.pgm", "0000_03528.pgm",
-        "0000_02194.pgm", "0000_02428.pgm", "0000_02575.pgm", "0000_02812.pgm", "0000_03529.pgm",
-        "0000_02199.pgm", "0000_02429.pgm", "0000_02576.pgm", "0000_02814.pgm", "0000_03530.pgm",
-        "0000_02201.pgm", "0000_02430.pgm", "0000_02577.pgm", "0000_02827.pgm", "0000_03531.pgm",
-        "0000_02212.pgm", "0000_02432.pgm", "0000_02578.pgm", "0000_02830.pgm", "0000_03532.pgm",
-        "0000_02223.pgm", "0000_02435.pgm", "0000_02583.pgm", "0000_02843.pgm", "0000_03534.pgm",
-        "0000_02225.pgm", "0000_02436.pgm", "0000_02590.pgm", "0000_02844.pgm", "0000_03535.pgm",
-        "0000_02240.pgm", "0000_02438.pgm", "0000_02591.pgm", "0000_02845.pgm", "0000_03536.pgm",
-        "0000_02244.pgm", "0000_02439.pgm", "0000_02592.pgm", "0000_02854.pgm", "0000_03551.pgm",
-        "0000_02246.pgm", "0000_02440.pgm", "0000_02593.pgm", "0000_02939.pgm", "0000_03592.pgm",
-        "0000_02255.pgm", "0000_02442.pgm", "0000_02594.pgm", "0000_02940.pgm", "0000_03720.pgm",
-        "0000_02261.pgm", "0000_02443.pgm", "0000_02596.pgm", "0000_02941.pgm", "0000_03723.pgm",
-        "0000_02274.pgm", "0000_02446.pgm", "0000_02597.pgm", "0000_02967.pgm", "0000_03733.pgm",
-        "0000_02281.pgm", "0000_02448.pgm", "0000_02598.pgm", "0000_02968.pgm", "0000_03757.pgm",
-        "0000_02283.pgm", "0000_02449.pgm", "0000_02599.pgm", "0000_02969.pgm", "0000_03759.pgm",
-        "0000_02286.pgm", "0000_02459.pgm", "0000_02600.pgm", "0000_02970.pgm", "0000_03762.pgm",
-        "0000_02287.pgm", "0000_02460.pgm", "0000_02601.pgm", "0000_02971.pgm", "0000_03772.pgm",
-        "0000_02290.pgm", "0000_02461.pgm", "0000_02603.pgm", "0000_02974.pgm", "0000_03773.pgm",
-        "0000_02291.pgm", "0000_02464.pgm", "0000_02611.pgm", "0000_02975.pgm", "0000_03779.pgm",
-        "0000_02294.pgm", "0000_02466.pgm", "0000_02613.pgm", "0000_02976.pgm", "0000_03781.pgm",
-        "0000_02295.pgm", "0000_02467.pgm", "0000_02614.pgm", "0000_02982.pgm", "0000_03859.pgm",
-        "0000_02298.pgm", "0000_02468.pgm", "0000_02615.pgm", "0000_02985.pgm", "0000_04637.pgm",
-        "0000_02299.pgm", "0000_02471.pgm", "0000_02617.pgm", "0000_02997.pgm", "0000_04786.pgm",
-        "0000_02303.pgm", "0000_02472.pgm", "0000_02619.pgm", "0000_02999.pgm", "0000_04787.pgm",
-        "0000_02304.pgm", "0000_02475.pgm", "0000_02623.pgm", "0000_03311.pgm", "0000_04788.pgm",
-        "0000_02316.pgm", "0000_02477.pgm", "0000_02624.pgm", "0000_03319.pgm", "0000_04789.pgm",
-        "0000_02317.pgm", "0000_02478.pgm", "0000_02628.pgm", "0000_03328.pgm", "0000_04790.pgm",
-        "0000_02323.pgm", "0000_02480.pgm", "0000_02632.pgm", "0000_03347.pgm", "0000_04791.pgm",
-        "0000_02331.pgm", "0000_02481.pgm", "0000_02711.pgm", "0000_03375.pgm", "0000_05147.pgm",
-        "0000_02335.pgm", "0000_02485.pgm", "0000_02712.pgm", "0000_03402.pgm", "0000_05148.pgm",
-        "0000_02350.pgm", "0000_02488.pgm", "0000_02713.pgm", "0000_03501.pgm", "0000_05149.pgm",
-        "0000_02359.pgm", "0000_02493.pgm", "0000_02716.pgm", "0000_03503.pgm", "0000_05194.pgm",
-        "0000_02365.pgm", "0000_02495.pgm", "0000_02717.pgm", "0000_03507.pgm", "0000_05195.pgm",
-        "0000_02402.pgm", "0000_02499.pgm", "0000_02718.pgm", "0000_03508.pgm", "0000_05196.pgm",
-        "0000_02403.pgm", "0000_02502.pgm", "0000_02731.pgm", "0000_03516.pgm", "0000_05198.pgm",
-        "0000_02414.pgm", "0000_02513.pgm", "0000_02732.pgm", "0000_03517.pgm", "0000_05223.pgm",
-        "0000_02416.pgm", "0000_02528.pgm", "0000_02733.pgm", "0000_03518.pgm", "0000_05235.pgm",
-        "0000_02417.pgm", "0000_02557.pgm", "0000_02768.pgm", "0000_03522.pgm", "0000_05242.pgm",
-        "0000_02420.pgm", "0000_02558.pgm", "0000_02773.pgm", "0000_03523.pgm", "0000_05243.pgm"
+    "yannick_1.jpg", "yannick_2.jpg", "yannick_3.jpg", "yannick_4.jpg", "yannick_5.jpg", "yannick_6.jpg", 
+    "yannick_7.jpg", "yannick_8.jpg", "yannick_9.jpg", "yannick_10.jpg", "yannick_11.jpg", "yannick_12.jpg", 
+    "yannick_13.jpg", "yannick_14.jpg", "yannick_16.jpg", "yannick_17.jpg", "yannick_18.jpg", "yannick_19.jpg", 
+    "yannick_20.jpg", "yannick_21.jpg", "yannick_22.jpg", "yannick_23.jpg", "yannick_24.jpg", "yannick_25.jpg", 
+    "yannick_26.jpg", "yannick_27.jpg", "yannick_28.jpg", "yannick_29.jpg", "yannick_30.jpg", "yannick_31.jpg", 
+    "yannick_32.jpg", "yannick_34.jpg", "yannick_35.jpg", "yannick_36.jpg", "yannick_37.jpg", "yannick_38.jpg", 
+    "yannick_39.jpg", "yannick_40.jpg", "yannick_41.jpg", "yannick_42.jpg", "yannick_43.jpg", "yannick_44.jpg", 
+    "yannick_45.jpg", "yannick_46.jpg", "yannick_47.jpg", "yannick_48.jpg", "yannick_49.jpg", "yannick_50.jpg", 
+    "yannick_51.jpg", "yannick_52.jpg", "yannick_53.jpg", "yannick_54.jpg", "yannick_55.jpg", "yannick_56.jpg", 
+    "yannick_57.jpg", "yannick_58.jpg", "yannick_59.jpg", "yannick_60.jpg", "yannick_61.jpg", "yannick_62.jpg", 
+    "yannick_63.jpg", "yannick_64.jpg", "yannick_65.jpg", "yannick_66.jpg", "yannick_67.jpg", "yannick_68.jpg", 
+    "yannick_69.jpg", "yannick_70.jpg", "yannick_71.jpg", "yannick_72.jpg", "yannick_73.jpg", "yannick_74.jpg", 
+    "yannick_75.jpg", "yannick_76.jpg", "yannick_77.jpg", "yannick_78.jpg", "yannick_79.jpg", "yannick_80.jpg", 
+    "yannick_81.jpg", "yannick_82.jpg", "yannick_83.jpg", "yannick_84.jpg", "yannick_85.jpg", "yannick_86.jpg", 
+    "yannick_87.jpg", "yannick_88.jpg", "yannick_89.jpg", "yannick_90.jpg", "yannick_91.jpg", "yannick_92.jpg", 
+    "yannick_93.jpg", "yannick_94.jpg", "yannick_95.jpg", "yannick_96.jpg", "yannick_97.jpg", "yannick_98.jpg", 
+    "yannick_99.jpg", "yannick_100.jpg", "yannick_101.jpg", "yannick_102.jpg", "yannick_103.jpg", "yannick_104.jpg", 
+    "yannick_105.jpg", "yannick_106.jpg", "yannick_107.jpg", "yannick_108.jpg", "yannick_109.jpg", "yannick_110.jpg", 
+    "yannick_111.jpg", "yannick_112.jpg", "yannick_113.jpg", "yannick_114.jpg", "yannick_115.jpg", "yannick_116.jpg", 
+    "yannick_117.jpg", "yannick_118.jpg", "yannick_119.jpg", "yannick_120.jpg", "yannick_121.jpg", "yannick_122.jpg", 
+    "yannick_123.jpg", "yannick_124.jpg", "yannick_125.jpg", "yannick_126.jpg", "yannick_127.jpg", "yannick_128.jpg", 
+    "yannick_129.jpg", "yannick_130.jpg", "yannick_131.jpg", "yannick_132.jpg", "yannick_133.jpg", "yannick_134.jpg", 
+    "yannick_135.jpg", "yannick_136.jpg", "yannick_137.jpg", "yannick_138.jpg", "yannick_139.jpg", "yannick_140.jpg", 
+    "yannick_141.jpg", "yannick_142.jpg", "yannick_143.jpg", "yannick_144.jpg", "yannick_145.jpg", "yannick_146.jpg", 
+    "yannick_147.jpg", "yannick_148.jpg", "yannick_149.jpg", "yannick_150.jpg", "yannick_151.jpg", "yannick_152.jpg", 
+    "yannick_153.jpg", "yannick_154.jpg", "yannick_155.jpg", "yannick_156.jpg", "yannick_157.jpg", "yannick_158.jpg", 
+    "yannick_159.jpg", "yannick_160.jpg", "yannick_161.jpg", "yannick_162.jpg", "yannick_163.jpg", "yannick_164.jpg", 
+    "yannick_165.jpg", "yannick_166.jpg", "yannick_167.jpg", "yannick_168.jpg", "yannick_169.jpg", "yannick_170.jpg", 
+    "yannick_171.jpg", "yannick_172.jpg", "yannick_173.jpg", "yannick_174.jpg", "yannick_175.jpg", "yannick_176.jpg", 
+    "yannick_177.jpg", "yannick_178.jpg", "yannick_179.jpg", "yannick_180.jpg", "yannick_181.jpg", "yannick_182.jpg", 
+    "yannick_183.jpg", "yannick_184.jpg", "yannick_185.jpg", "yannick_186.jpg", "yannick_187.jpg", "yannick_188.jpg", 
+    "yannick_189.jpg", "yannick_190.jpg", "yannick_191.jpg", "yannick_192.jpg", "yannick_193.jpg", "yannick_194.jpg", 
+    "yannick_195.jpg", "yannick_196.jpg", "yannick_197.jpg", "yannick_198.jpg", "yannick_199.jpg", "yannick_200.jpg", 
+    "yannick_201.jpg", "yannick_202.jpg", "yannick_203.jpg", "yannick_204.jpg", "yannick_205.jpg", "yannick_206.jpg", 
+    "yannick_207.jpg", "yannick_208.jpg", "yannick_209.jpg", "yannick_210.jpg", "yannick_211.jpg", "yannick_212.jpg", 
+    "yannick_213.jpg", "yannick_214.jpg", "yannick_215.jpg", "yannick_216.jpg", "yannick_217.jpg", "yannick_218.jpg", 
+    "yannick_219.jpg", "yannick_220.jpg", "yannick_221.jpg", "yannick_222.jpg", "yannick_223.jpg", "yannick_224.jpg", 
+    "yannick_225.jpg", "yannick_226.jpg", "yannick_227.jpg", "yannick_228.jpg", "yannick_229.jpg", "yannick_230.jpg", 
+    "yannick_231.jpg", "yannick_232.jpg", "yannick_233.jpg", "yannick_234.jpg", "yannick_235.jpg", "yannick_236.jpg", 
+    "yannick_237.jpg", "yannick_238.jpg", "yannick_239.jpg", "yannick_240.jpg", "yannick_241.jpg", "yannick_242.jpg", 
+    "yannick_243.jpg", "yannick_244.jpg", "yannick_245.jpg", "yannick_246.jpg", "yannick_247.jpg", "yannick_248.jpg", 
+    "yannick_249.jpg", "yannick_250.jpg", "yannick_251.jpg", "yannick_252.jpg", "yannick_253.jpg", "yannick_254.jpg", 
+    "yannick_255.jpg", "yannick_256.jpg", "yannick_257.jpg", "yannick_258.jpg", "yannick_259.jpg", "yannick_260.jpg", 
+    "yannick_261.jpg", "yannick_262.jpg", "yannick_263.jpg", "yannick_264.jpg", "yannick_265.jpg", "yannick_266.jpg", 
+    "yannick_267.jpg", "yannick_268.jpg", "yannick_269.jpg", "yannick_270.jpg", "yannick_271.jpg", "yannick_272.jpg", 
+    "yannick_273.jpg", "yannick_274.jpg", "yannick_275.jpg", "yannick_276.jpg", "yannick_277.jpg", "yannick_278.jpg", 
+    "yannick_279.jpg", "yannick_280.jpg", "yannick_281.jpg", "yannick_282.jpg", "yannick_283.jpg", "yannick_284.jpg", 
+    "yannick_285.jpg", "yannick_286.jpg", "yannick_287.jpg", "yannick_288.jpg", "yannick_289.jpg", "yannick_290.jpg", 
+    "yannick_291.jpg", "yannick_292.jpg", "yannick_293.jpg", "yannick_294.jpg", "yannick_295.jpg", "yannick_296.jpg", 
+    "yannick_297.jpg", "yannick_298.jpg", "yannick_299.jpg", "yannick_300.jpg", "yannick_301.jpg", "yannick_302.jpg", 
+    "yannick_303.jpg", "yannick_304.jpg", "yannick_305.jpg", "yannick_306.jpg", "yannick_307.jpg", "yannick_308.jpg", 
+    "yannick_309.jpg", "yannick_310.jpg", "yannick_311.jpg", "yannick_312.jpg", "yannick_313.jpg", "yannick_314.jpg", 
+    "yannick_315.jpg", "yannick_316.jpg", "yannick_317.jpg", "yannick_318.jpg", "yannick_319.jpg", "yannick_320.jpg", 
+    "yannick_321.jpg", "yannick_322.jpg", "yannick_323.jpg", "yannick_324.jpg", "yannick_325.jpg", "yannick_326.jpg", 
+    "yannick_327.jpg", "yannick_328.jpg", "yannick_329.jpg", "yannick_330.jpg", "yannick_331.jpg", "yannick_332.jpg", 
+    "yannick_333.jpg", "yannick_334.jpg", "yannick_335.jpg", "yannick_336.jpg", "yannick_337.jpg", "yannick_338.jpg", 
+    "yannick_339.jpg", "yannick_340.jpg", "yannick_341.jpg", "yannick_342.jpg", "yannick_343.jpg", "yannick_344.jpg", 
+    "yannick_345.jpg", "yannick_346.jpg", "yannick_347.jpg", "yannick_348.jpg", "yannick_349.jpg", "yannick_350.jpg", 
+    "yannick_351.jpg", "yannick_352.jpg", "yannick_353.jpg", "yannick_354.jpg", "yannick_355.jpg", "yannick_356.jpg", 
+    "yannick_357.jpg", "yannick_358.jpg", "yannick_359.jpg", "yannick_360.jpg", "yannick_361.jpg", "yannick_362.jpg", 
+    "yannick_363.jpg", "yannick_364.jpg", "yannick_365.jpg", "yannick_366.jpg", "yannick_367.jpg", "yannick_368.jpg", 
+    "yannick_369.jpg", "yannick_370.jpg", "yannick_371.jpg", "yannick_372.jpg", "yannick_373.jpg", "yannick_374.jpg", 
+    "yannick_375.jpg", "yannick_376.jpg", "yannick_377.jpg", "yannick_378.jpg", "yannick_379.jpg", "yannick_380.jpg", 
+    "yannick_381.jpg", "yannick_382.jpg", "yannick_383.jpg", "yannick_384.jpg", "yannick_385.jpg", "yannick_386.jpg", 
+    "yannick_387.jpg", "yannick_388.jpg", "yannick_389.jpg", "yannick_390.jpg", "yannick_391.jpg", "yannick_392.jpg", 
+    "yannick_393.jpg", "yannick_394.jpg", "yannick_395.jpg", "yannick_396.jpg", "yannick_397.jpg", "yannick_398.jpg", 
+    "yannick_399.jpg"
     };
 
     // Read the dataset and labels
@@ -60,7 +87,7 @@ int main() {
         cv::Mat image = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
 
         // Resize the image to a consistent size (e.g., 100x100)
-        cv::resize(image, image, cv::Size(100, 100));
+        //cv::resize(image, image, cv::Size(115, 115));
 
         // Add the image and corresponding label to the vectors
         images.push_back(image);
@@ -73,7 +100,7 @@ int main() {
     model->train(images, labels);
 
     // Save the trained model
-    model->save("model.xml");
+    model->save("models/model_me.xml");
 
     return 0;
 }
