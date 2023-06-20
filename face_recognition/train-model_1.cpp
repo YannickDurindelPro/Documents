@@ -10,7 +10,6 @@ namespace fs = std::filesystem;
 int main() {
     // Define the path to the directory containing the dataset images
     std::string datasetRootPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset/";
-
     // Vector to store image paths
     std::vector<std::string> imagePaths;
 
@@ -67,8 +66,8 @@ int main() {
     }
 
     // Create and train the LBPHFaceRecognizer model
-    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 10, 8, 8, 100.0);      //(radius, neighbors, grid_x, grid_y, threshold)
-    
+    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 100.0);
+
     model->train(images, labels);
 
     // Save the trained model

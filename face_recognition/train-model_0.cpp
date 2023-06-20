@@ -19,7 +19,7 @@ int main() {
     std::vector<int> labels;
 
     // Initialize the label counter
-    int currentLabel = 0;
+    int labelCounter = 0;
 
     // Iterate over folders in the dataset root directory
     for (const auto& personDir : fs::directory_iterator(datasetRootPath)) {
@@ -46,29 +46,25 @@ int main() {
                 continue;
             }
 
-            // Convert the image to grayscale if necessary
-            if (image.channels() > 1) {
-                cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
-            }
+            // Resize the image to a consistent size (e.g., 100x100)
+            //cv::resize(image, image, cv::Size(100, 100));
 
-            // Resize the face region to a consistent size (e.g., 100x100)
-            cv::resize(image, image, cv::Size(100, 100));
-
-            // Add the face image and corresponding label to the vectors
+            // Add the image and corresponding label to the vectors
             images.push_back(image);
-            labels.push_back(currentLabel);
+            labels.push_back(labelCounter);  // Assign incremental labels for training
+
+            //std::cout << "Added image: " << imagePath << std::endl;
         }
 
         // Increment the label counter for the next person
-        currentLabel++;
+        labelCounter++;
 
         // Clear imagePaths for the next person
         imagePaths.clear();
     }
 
     // Create and train the LBPHFaceRecognizer model
-    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 10, 8, 8, 100.0);      //(radius, neighbors, grid_x, grid_y, threshold)
-    
+    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1,8, 4, 4, 80.0);
     model->train(images, labels);
 
     // Save the trained model
