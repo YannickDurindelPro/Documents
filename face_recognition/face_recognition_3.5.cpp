@@ -11,19 +11,17 @@ int main() {
     faceCascade.load("/home/yannickdurindel/Documents/other/opencv/data/lbpcascades/lbpcascade_frontalface_improved.xml");
 
     // Initialize the camera
-    cv::VideoCapture camera(0);  // Change the argument to the appropriate camera index if needed
+    cv::VideoCapture camera(1);  // Change the argument to the appropriate camera index if needed
     if (!camera.isOpened()) {
         std::cerr << "Failed to open the camera." << std::endl;
         return 1;
     }
 
     // Define the labels and corresponding person names
-    std::vector<int> labels = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    std::vector<int> labels = {0, 1, 2, 3};
     std::vector<std::string> personNames = {
-        "Ilia_Seliverstov","Frederic_Aubert","Jean-Pierre_Stang","Jules_Gregoire"
-        ,"Maelle_Neumann","Pascal_Chevallier","Romain_Duflot","Elsa_Ramond"
-        ,"Quentin_Ailloud","Yannick_Durindel","Neyl_Boukerche","Stephane_Grange","Yoan_Dumas"
-        ,"Aretem_Minenko","Evgeunii_Dombrovskii","Alexandre_Goudeau","Gaetan_Pons"
+        "Ilia_Seliverstov","Manequin",
+        "Yannick_Durindel","Evgeunii_Dombrovskii"
     };
 
     while (true) {
@@ -44,7 +42,7 @@ int main() {
             // Resize the face region to match the model's input size
             cv::Mat faceROI = grayFrame(face);
             cv::Mat resizedFace;
-            cv::resize(faceROI, resizedFace, cv::Size(100, 100));
+            cv::resize(faceROI, resizedFace, cv::Size(500, 500));
 
             // Predict the label of the face
             int predictedLabel = -1;

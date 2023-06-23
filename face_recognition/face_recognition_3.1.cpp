@@ -1,6 +1,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/face.hpp>
 
+using namespace cv;
+
 int main() {
     // Load the face recognition model
     cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create();
@@ -15,7 +17,7 @@ int main() {
 
     // Train the face recognition model with the profile image
     std::vector<cv::Mat> profileImages = { profileImage };
-    std::vector<int> profileLabels = { 0 };
+    std::vector<int> profileLabels = { brightImg0 };
     model->train(profileImages, profileLabels);
 
     // Read and process the image to be tested
@@ -24,6 +26,34 @@ int main() {
     // Detect faces in the test image
     std::vector<cv::Rect> faces;
     faceCascade.detectMultiScale(testImage, faces);
+
+    // Detect faces of different sizes using cascade classifier
+    faceCascade.detectMultiScale(brightImg, faces, 1.05, 3, 0 | CASCADE_SCALE_IMAGE, Size(80, 80));
+
+    // Draw rectangles around the faces
+    for (size_t i = 0; i < faces.size(); i++)
+    {
+        Rect r = faces[i];
+        Mat smallImgROI;
+        vector<Rect> nestedObjects;
+        Point center;
+        Scalar color = Scalar(255, 0, 0); // Color for Drawing tool
+
+        double aspect_ratio = (double)r.width / r.height;
+        if (0.75 < aspect_ratio && aspect_ratio < 1.3)
+        {
+            Rect faceRect(cvRound(r.x * scale), cvRound(r.y * scale), cvRound(r.width * scale), cvRound(r.height * scale));
+            rectangle(img, faceRect, Scalar(0, 0, 0), 3, 8, 0);
+            //imwrite("face.jpg", img);
+        }
+        else
+            rectangle(img, Point(cvRound(r.x * scale), cvRound(r.y * scale)), Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)), Scalar(255, 0, 0), 3, 8, 0);
+            //imwrite("facebis.jpg", img);
+
+        if (eyeCascade.empty() || mouthCascade.empty())
+            continue;
+        smallImgROI = smallImg(r);
+    }
 
     // Perform face recognition on the detected faces
     for (const auto& face : faces) {

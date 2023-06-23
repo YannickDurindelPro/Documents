@@ -46,14 +46,18 @@ int main() {
                 continue;
             }
 
+            cv::Mat adjustedImage;
+            image.convertTo(adjustedImage, -1, 1, 0);  // Increase brightness by a factor of 1.5
+
+
             // Resize the image to a consistent size (e.g., 100x100)
-            //cv::resize(image, image, cv::Size(100, 100));
+            cv::resize(image, image, cv::Size(500,500));
 
             // Add the image and corresponding label to the vectors
             images.push_back(image);
             labels.push_back(labelCounter);  // Assign incremental labels for training
 
-            //std::cout << "Added image: " << imagePath << std::endl;
+            //std::cout << "Added image: " << imagePath << "labelCounter : " << labelCounter << std::endl;
         }
 
         // Increment the label counter for the next person
@@ -64,7 +68,7 @@ int main() {
     }
 
     // Create and train the LBPHFaceRecognizer model
-    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1,8, 4, 4, 80.0);
+    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 70.0);       //(Radius, Neighbour : Precision, Grid, Threshold : Confidence)
     model->train(images, labels);
 
     // Save the trained model

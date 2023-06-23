@@ -3,7 +3,8 @@
 #include <sstream>
 
 int main() {
-    cv::VideoCapture capture(0);  // Open the default camera (index 0)
+    // Open the DroidCam camera
+    cv::VideoCapture capture("http://192.168.1.139:4747/video");
 
     // Load the face detection model
     cv::CascadeClassifier faceCascade;
@@ -16,12 +17,12 @@ int main() {
 
     int delay = 1;  // Delay between capturing frames in milliseconds
     int count = 0;  // Counter for the captured images
-    std::string name = "Yannick_Durindel";    // Setting up the user profile
+    std::string name = "Ilia_Seliverstov";  // Setting up the user profile
 
     cv::namedWindow("Camera", cv::WINDOW_NORMAL);
 
-    // Capture and save 100 images
-    while (count < 100) {
+    // Capture and save 500 images
+    while (count < 500) {
         cv::Mat frame;
         capture.read(frame);  // Capture a frame from the camera
 
@@ -42,17 +43,33 @@ int main() {
             // Get the largest face region
             cv::Rect faceRegion = faces[0];
 
+            // Expand the face region by a factor of 1.2
+            float expandFactor = 1.5;
+            float expandX = faceRegion.width * expandFactor;
+            float expandY = faceRegion.height * expandFactor;
+            float expandXOffset = (expandX - faceRegion.width) / 2;
+            float expandYOffset = (expandY - faceRegion.height) / 2;
+
+            faceRegion.x -= expandXOffset;
+            faceRegion.y -= expandYOffset;
+            faceRegion.width = expandX;
+            faceRegion.height = expandY;
+
+            // Ensure the expanded region is within the frame bounds
+            cv::Rect frameBounds(0, 0, frame.cols, frame.rows);
+            faceRegion = faceRegion & frameBounds;
+
             // Extract the face region from the frame
             cv::Mat face = grayFrame(faceRegion);
 
             // Resize the face region to match the desired size
-            cv::resize(face, face, cv::Size(100, 100));
+            cv::resize(face, face, cv::Size(500, 500));
 
             cv::imshow("Camera", face);  // Display the captured face region
 
             std::stringstream filename;
             filename << name << count << ".jpg";
-            cv::imwrite("dataset/train-dataset/" + name + "/" + filename.str(), face);  // Save the captured face region as an image
+            cv::imwrite("dataset/test_dataset/" + name + "/" + filename.str(), face);  // Save the captured face region as an image
 
             count++;
         }

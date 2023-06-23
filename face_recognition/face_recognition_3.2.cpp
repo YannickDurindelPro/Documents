@@ -4,7 +4,7 @@
 int main() {
     // Load the face recognition model
     cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create();
-    model->read("/home/yannickdurindel/Documents/face_recognition/models/model_me.xml");
+    model->read("/home/yannickdurindel/Documents/face_recognition/model.xml");
 
     // Load the face detection model
     cv::CascadeClassifier faceCascade;
