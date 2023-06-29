@@ -40,7 +40,7 @@ To get started with the Eyelights DMS system, follow these steps:
 Clone the repository to your local development environment:
 
 
-git clone https://github.com/YannickDurindelPro/Eyelights-DMS.git
+`git clone https://github.com/YannickDurindelPro/Eyelights-DMS.git`
 
 
 Explore the different directories and files to familiarize yourself with the project structure and code.
