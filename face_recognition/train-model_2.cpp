@@ -1,57 +1,59 @@
 #include <opencv2/opencv.hpp>
-#include <iostream>
+#include <opencv2/face.hpp>
+#include <dirent.h>
 #include <vector>
+#include <string>
 
-const int IMG_WIDTH = 100;
-const int IMG_HEIGHT = 100;
+using namespace cv;
+using namespace cv::face;
 
-void loadTrainingData(const std::string& folderPath, std::vector<cv::Mat>& images, std::vector<int>& labels) {
-    cv::Mat image;
-    int label = 0;
+void trainAndSaveModel(const std::string& datasetPath, const std::string& savePath) {
+    Ptr<LBPHFaceRecognizer> model = LBPHFaceRecognizer::create();
 
-    // Load images from each subfolder
-    cv::glob(folderPath + "/*", images, false);
+    // Load the training dataset
+    std::vector<Mat> images;
+    std::vector<int> labels;
+    int currentLabel = 0;
 
-    for (const auto& folder : images) {
-        cv::String className = folder.substr(folder.find_last_of('/') + 1);
+    DIR* dir;
+    struct dirent* entry;
+    if ((dir = opendir(datasetPath.c_str())) != NULL) {
+        while ((entry = readdir(dir)) != NULL) {
+            if (entry->d_type == DT_DIR && strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
+                const std::string classPath = datasetPath + entry->d_name;
 
-        // Load images from the current class folder
-        std::vector<cv::String> files;
-        cv::glob(folder + "/*.jpg", files, false);
+                DIR* classDir;
+                struct dirent* imageEntry;
+                if ((classDir = opendir(classPath.c_str())) != NULL) {
+                    while ((imageEntry = readdir(classDir)) != NULL) {
+                        if (imageEntry->d_type == DT_REG) {
+                            const std::string imagePath = classPath + "/" + imageEntry->d_name;
+                            Mat image = imread(imagePath, IMREAD_GRAYSCALE);
 
-        for (const auto& file : files) {
-            // Read the image and resize it to a fixed size
-            image = cv::imread(file, cv::IMREAD_GRAYSCALE);
-            cv::resize(image, image, cv::Size(IMG_WIDTH, IMG_HEIGHT));
+                            labels.push_back(currentLabel);
+                            images.push_back(image);
+                        }
+                    }
+                    closedir(classDir);
+                }
 
-            // Add the image and its corresponding label to the training data
-            images.push_back(image);
-            labels.push_back(label);
+                currentLabel++;
+            }
         }
-
-        label++;
+        closedir(dir);
     }
+
+    // Train the face recognition model
+    model->train(images, labels);
+
+    // Save the trained model
+    model->save(savePath);
 }
 
 int main() {
-    // Path to the training dataset folder
-    std::string datasetPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset";
-
-    // Vector to store training images and labels
-    std::vector<cv::Mat> images;
-    std::vector<int> labels;
-
-    // Load the training data
-    loadTrainingData(datasetPath, images, labels);
-
-    // Create the face recognition model
-    cv::Ptr<cv::face::FaceRecognizer> model = cv::face::LBPHFaceRecognizer::create();
-
-    // Train the model with the loaded data
-    model->train(images, labels);
-
-    // Save the trained model to a file
-    model->save("/path/to/trained_model.xml");
+    std::string datasetPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset/";
+    std::string savePath = "model.xml";
+    trainAndSaveModel(datasetPath, savePath);
 
     return 0;
 }
