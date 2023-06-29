@@ -68,7 +68,7 @@ int main() {
     }
 
     // Create and train the LBPHFaceRecognizer model
-    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 70.0);       //(Radius, Neighbour : Precision, Grid, Threshold : Confidence)
+    cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 80.0);       //(Radius, Neighbour : Precision, Grid, Threshold : Confidence)
     model->train(images, labels);
 
     // Save the trained model
