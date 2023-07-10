@@ -1,0 +1,2 @@
+g++ create-data.cpp -o create-data `pkg-config --cflags --libs opencv4`
+./create-data

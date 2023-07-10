@@ -1,0 +1,4 @@
+g++ -std=c++17 face_recognition_4.2.cpp -I /usr/local/include -o reco -lopencv_face `pkg-config --cflags --libs opencv4`
+g++ -std=c++17 train-model_0.cpp -I /usr/local/include -o train -lopencv_face `pkg-config --cflags --libs opencv4`
+./train
+./reco
