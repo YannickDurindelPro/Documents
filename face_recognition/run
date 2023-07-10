@@ -1,0 +1,4 @@
+g++ face_recognition_3.5.cpp -o reco `pkg-config --cflags --libs opencv4`
+g++ train-model_0.cpp -o train `pkg-config --cflags --libs opencv4`
+./train
+./reco
