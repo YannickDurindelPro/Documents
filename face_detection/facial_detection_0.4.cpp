@@ -26,10 +26,10 @@ int main( int argc, const char** argv )
     double scale=1;
  
     // Load classifiers from "opencv/data/haarcascades" directory
-    nestedCascade.load( "/usr/include/opencv4/opencv2/haarcascades/haarcascade_eye_tree_eyeglasses.xml" ) ;
+    nestedCascade.load( "/usr/share/opencv4/opencv2/haarcascades/haarcascade_eye_tree_eyeglasses.xml" ) ;
  
     // Change path before execution
-    cascade.load( "/usr/include/opencv4/opencv2/haarcascades/haarcascade_frontalcatface.xml" ) ;
+    cascade.load( "/usr/share/opencv4/opencv2/haarcascades/haarcascade_frontalcatface.xml" ) ;
  
     // Start Video..1) 0 for WebCam 2) "Path to Video" for a Local Video
     capture.open(0);

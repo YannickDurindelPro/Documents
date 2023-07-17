@@ -9,7 +9,7 @@ namespace fs = std::filesystem;
 
 int main() {
     // Define the path to the directory containing the dataset images
-    std::string datasetRootPath = "/home/yannickdurindel/Documents/face_recognition/dataset/train-dataset/";
+    std::string datasetRootPath = "/home/eyelights/Documents/face_recognition/dataset/train-dataset/";
     // Vector to store image paths
     std::vector<std::string> imagePaths;
 
