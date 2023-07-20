@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "GDExtension: build",
+            "command": "python build.py ${input:BLACKBAND_PATH}",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "detail": "Build GDExtension"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "BLACKBAND_PATH",
+            "type": "promptString",
+            "description": "Name your component.",
+            "default": "/home/eyelights/Documents/gd-eye-recognizer-master/thirdparty/godot-4.0/cpp/test/demo"
+        }
+    ]
+}

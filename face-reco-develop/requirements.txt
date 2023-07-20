@@ -1,5 +1,0 @@
-urllib3
-progressbar
-scons
-packaging
-opencv4
