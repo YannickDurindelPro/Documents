@@ -20,7 +20,7 @@ class PhisicalCamera : public godot::Node  {
         void _process(double delta) override;
         void shutdown();
         void create_imagetexture_objects();
-        bool open(int cameraId);
+        bool open();
         cv::Mat get_current_frame();
         static void _bind_methods();
     private: // Godot interfaces.
