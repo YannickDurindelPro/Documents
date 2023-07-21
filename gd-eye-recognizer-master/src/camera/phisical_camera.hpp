@@ -6,7 +6,12 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/opencv.hpp>
+#include <opencv2/face.hpp>
+#include <filesystem>
+#include <omp.h>
 #include <iostream>
+#include <vector>
+#include <string>
 
 
 namespace EyeLights { 
@@ -20,7 +25,7 @@ class PhisicalCamera : public godot::Node  {
         void _process(double delta) override;
         void shutdown();
         void create_imagetexture_objects();
-        bool open();
+        bool open(int cameraId);
         cv::Mat get_current_frame();
         static void _bind_methods();
     private: // Godot interfaces.

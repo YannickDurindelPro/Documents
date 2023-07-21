@@ -17,103 +17,76 @@ namespace EyeLights { namespace EyeRecognizer {
     void PhisicalCamera::_bind_methods() {
         std::cout << "PhisicalCamera::_bind_methods()" << std::endl;
         ClassDB::bind_method(D_METHOD("open"), &PhisicalCamera::open);
-        ClassDB::bind_method(D_METHOD("show"), &PhisicalCamera::_process);
     }
 
-    bool PhisicalCamera::open() {
-        // VideoCapture class for playing video for which faces to be detected
-        cv::VideoCapture capture;
-        cv::Mat frame, image;
-    
-        // PreDefined trained XML classifiers with facial features
-        CascadeClassifier cascade, nestedCascade;
-        double scale=1;
-    
-        // Load classifiers from "opencv/data/haarcascades" directory
-        nestedCascade.load( "/usr/share/opencv4/haarcascades/haarcascade_eye_tree_eyeglasses.xml" ) ;
-    
-        // Change path before execution
-        cascade.load( "/usr/share/opencv4/haarcascades/haarcascade_frontalcatface.xml" ) ;
-    
-        // Start Video..1) 0 for WebCam 2) "Path to Video" for a Local Video
-        capture.open("http://192.168.1.188:4747/video");
-        if( capture.isOpened() )
-        {
-            // Capture frames from video and detect faces
-            cout << "Face Detection Started...." << endl;
-            while(1)
-            {
-                capture >> frame;
-                if( frame.empty() )
-                    std::cerr << "frame is empty" << std::endl;
-                    break;
-                Mat frame1 = frame.clone();
+    bool PhisicalCamera::open(int cameraId) {
+        // Define the path to the directory containing the dataset images
+        std::string datasetRootPath = "/home/eyelights/Documents/face_recognition/dataset/train-dataset/";
 
-                vector<Rect> faces, faces2;
-                Mat gray, smallImg;
-            
-                cvtColor( image, gray, COLOR_BGR2GRAY ); // Convert to Gray Scale
-                double fx = 1 / scale;
-            
-                // Resize the Grayscale Image
-                resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
-                equalizeHist( smallImg, smallImg );
-                double brightness = 150; // Adjust this value as needed
-                cv::Mat brightImg = smallImg + cv::Scalar(brightness, brightness, brightness);
-            
-                // Detect faces of different sizes using cascade classifier
-                cascade.detectMultiScale(brightImg, faces, 1.2, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30));
+        // Vector to store image paths
+        std::vector<std::string> imagePaths;
 
-            
-                // Draw circles around the faces
-                for ( size_t i = 0; i < faces.size(); i++ )
-                {
-                    Rect r = faces[i];
-                    Mat smallImgROI;
-                    vector<Rect> nestedObjects;
-                    Point center;
-                    Scalar color = Scalar(255, 0, 0); // Color for Drawing tool
-                    int radius;
-            
-                    double aspect_ratio = (double)r.width/r.height;
-                    if( 0.75 < aspect_ratio && aspect_ratio < 1.3 )
-                    {
-                        Rect faceRect(cvRound(r.x * scale), cvRound(r.y * scale),cvRound(r.width * scale), cvRound(r.height * scale));
-                        rectangle(image, faceRect, (0,0,0), 3, 8, 0);
-                    }
-                    else
-                    rectangle(image, cv::Point(cvRound(r.x*scale), cvRound(r.y*scale)),
-                        cv::Point(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
-                        cv::Scalar(255, 0, 0), 3, 8, 0);
+        // Read the dataset and labels
+        std::vector<cv::Mat> images;
+        std::vector<int> labels;
 
-                    if( nestedCascade.empty() )
-                        continue;
-                    smallImgROI = smallImg( r );
-                    
-                    // Detection of eyes in the input image
-                    nestedCascade.detectMultiScale( smallImgROI, nestedObjects, 1.05, 2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
-                    
-                    // Draw rectangles around eyes
-                    for (size_t j = 0; j < nestedObjects.size(); j++)
-                    {
-                        Rect nr = nestedObjects[j];
-                        Rect eyeRect(cvRound((r.x + nr.x) * scale), cvRound((r.y + nr.y) * scale),cvRound(nr.width * scale), cvRound(nr.height * scale));
-                        rectangle(image, eyeRect, color, 3, 8, 0);
-                    }
-                }
-            
-                // Show Processed Image with detected faces
-                imshow( "Face Detection", image );
-                
-                char c = (char)waitKey(10);
-            
-                // Press q to exit from window
-                if( c == 27 || c == 'q' || c == 'Q' )
-                    break;
+        // Initialize the label counter
+        int labelCounter = 0;
+
+        // Iterate over folders in the dataset root directory
+        for (const auto& personDir : std::experimental::filesystem::directory_iterator(datasetRootPath)) {
+            if (!personDir.is_directory()) {
+                continue;
             }
+
+            std::string personName = personDir.path().filename().string();
+            std::cout << "Training for person: " << personName << std::endl;
+
+            // Iterate over files in the person's directory
+            for (const auto& entry : std::experimental::filesystem::directory_iterator(personDir.path())) {
+                if (entry.is_regular_file()) {
+                    imagePaths.push_back(entry.path().string());
+                }
+            }
+
+            // Loop through the image paths
+            for (const std::string& imagePath : imagePaths) {
+                cv::Mat image = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
+
+                if (image.empty()) {
+                    std::cerr << "Failed to read image: " << imagePath << std::endl;
+                    continue;
+                }
+
+                cv::Mat adjustedImage;
+                image.convertTo(adjustedImage, -1, 1, 0);  // Increase brightness by a factor of 1.5
+
+
+                // Resize the image to a consistent size (e.g., 100x100)
+                cv::resize(image, image, cv::Size(500,500));
+
+                // Add the image and corresponding label to the vectors
+                images.push_back(image);
+                labels.push_back(labelCounter);  // Assign incremental labels for training
+
+                //std::cout << "Added image: " << imagePath << "labelCounter : " << labelCounter << std::endl;
+            }
+
+            // Increment the label counter for the next person
+            labelCounter++;
+
+            // Clear imagePaths for the next person
+            imagePaths.clear();
         }
-        else
-            cout<<"Could not Open Camera";
+
+        // Create and train the LBPHFaceRecognizer model
+        cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 80.0);       //(Radius, Neighbour : Precision, Grid, Threshold : Confidence)
+        model->train(images, labels);
+
+        // Save the trained model
+        std::string modelPath = "model.xml";
+        model->save(modelPath);
+
         return 0;
     }
 

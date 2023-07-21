@@ -75,7 +75,8 @@
         "valarray": "cpp",
         "variant": "cpp",
         "bit": "cpp",
-        "__nullptr": "cpp"
+        "__nullptr": "cpp",
+        "*.inc": "cpp"
     },
     "cmake.sourceDirectory": "/home/eyelights/Documents/gd-eye-recognizer-master/thirdparty/dlib"
 }
