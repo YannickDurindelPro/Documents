@@ -4,11 +4,11 @@
 
 int main() {
     // Open the DroidCam camera
-    cv::VideoCapture capture("http://192.168.1.139:4747/video");
+    cv::VideoCapture capture("http://192.168.1.188:4747/video");
 
     // Load the face detection model
     cv::CascadeClassifier faceCascade;
-    faceCascade.load(cv::samples::findFile("/home/yannickdurindel/Documents/other/opencv/data/lbpcascades/lbpcascade_frontalface_improved.xml"));
+    faceCascade.load(cv::samples::findFile("/usr/share/opencv4/lbpcascades/lbpcascade_frontalface_improved.xml"));
 
     if (!capture.isOpened()) {
         std::cerr << "Failed to open the camera." << std::endl;
@@ -17,7 +17,7 @@ int main() {
 
     int delay = 1;  // Delay between capturing frames in milliseconds
     int count = 0;  // Counter for the captured images
-    std::string name = "Ilia_Seliverstov";  // Setting up the user profile
+    std::string name = "Ethan_Dupic";  // Setting up the user profile
 
     cv::namedWindow("Camera", cv::WINDOW_NORMAL);
 
@@ -69,7 +69,7 @@ int main() {
 
             std::stringstream filename;
             filename << name << count << ".jpg";
-            cv::imwrite("dataset/test_dataset/" + name + "/" + filename.str(), face);  // Save the captured face region as an image
+            cv::imwrite("dataset/train-dataset/" + name + "/" + filename.str(), face);  // Save the captured face region as an image
 
             count++;
         }
@@ -81,3 +81,4 @@ int main() {
 
     return 0;
 }
+

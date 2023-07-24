@@ -23,35 +23,33 @@ namespace EyeLights { namespace EyeRecognizer {
         // Define the path to the directory containing the dataset images
         std::string datasetRootPath = "/home/eyelights/Documents/face_recognition/dataset/train-dataset/";
 
+        // Define the labels and corresponding person names
+        std::vector<int> labels = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        std::vector<std::string> personNames = {
+            "Frederic_Aubert", "Jean-Pierre_Stang", "Jules_Gregoire", "Neyl_Boukerche", "Pascal_Chevallier", "Alexandre_Goudeau", "Jerome_Pauc",
+            "Evgeunii_Dombrovskii", "Ilia_Seliverstov", "Stephane_Grange", "Yannick_Durindel", "Nicolas_Hourcastagnou"
+        };
+
         // Vector to store image paths
         std::vector<std::string> imagePaths;
 
         // Read the dataset and labels
         std::vector<cv::Mat> images;
-        std::vector<int> labels;
+        std::vector<int> index;
 
         // Initialize the label counter
         int labelCounter = 0;
 
         // Iterate over folders in the dataset root directory
-        for (const auto& personDir : std::experimental::filesystem::directory_iterator(datasetRootPath)) {
-            if (!personDir.is_directory()) {
-                continue;
-            }
+        for (int i = 0 ; i < 16 ; i++) {
 
-            std::string personName = personDir.path().filename().string();
+            std::string personName = personNames[i];
             std::cout << "Training for person: " << personName << std::endl;
 
-            // Iterate over files in the person's directory
-            for (const auto& entry : std::experimental::filesystem::directory_iterator(personDir.path())) {
-                if (entry.is_regular_file()) {
-                    imagePaths.push_back(entry.path().string());
-                }
-            }
-
             // Loop through the image paths
-            for (const std::string& imagePath : imagePaths) {
-                cv::Mat image = cv::imread(imagePath, cv::IMREAD_GRAYSCALE);
+            for (int j = 0 ; j < 500 ; j++) {
+                std::string imagePath = std::string(datasetRootPath) + std::string(personName) + "/" + std::string(personName) + std::to_string(i) + ".jpg";
+                cv::Mat image = cv::imread(imagePath);
 
                 if (image.empty()) {
                     std::cerr << "Failed to read image: " << imagePath << std::endl;
@@ -61,13 +59,12 @@ namespace EyeLights { namespace EyeRecognizer {
                 cv::Mat adjustedImage;
                 image.convertTo(adjustedImage, -1, 1, 0);  // Increase brightness by a factor of 1.5
 
-
                 // Resize the image to a consistent size (e.g., 100x100)
-                cv::resize(image, image, cv::Size(500,500));
+                cv::resize(image, image, cv::Size(500, 500));
 
                 // Add the image and corresponding label to the vectors
                 images.push_back(image);
-                labels.push_back(labelCounter);  // Assign incremental labels for training
+                index.push_back(labelCounter);  // Assign incremental labels for training
 
                 //std::cout << "Added image: " << imagePath << "labelCounter : " << labelCounter << std::endl;
             }
@@ -80,25 +77,14 @@ namespace EyeLights { namespace EyeRecognizer {
         }
 
         // Create and train the LBPHFaceRecognizer model
-        cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1, 8, 8, 8, 80.0);       //(Radius, Neighbour : Precision, Grid, Threshold : Confidence)
-        model->train(images, labels);
+        //cv::Ptr<cv::face::LBPHFaceRecognizer> model = cv::face::LBPHFaceRecognizer::create(1,8,8,8,80);
+        //model->train(images, labels);
 
         // Save the trained model
-        std::string modelPath = "model.xml";
-        model->save(modelPath);
+        std::string modelPath = "/home/eyelights/Documents/face_recognition/model.xml";
+        //model->save(modelPath);
 
         return 0;
-    }
-
-
-    void PhisicalCamera::_process(double delta) {
-        if (isOpened) {
-            cap >> currentFrame;
-            if (!currentFrame.empty()) {
-                cv::imshow("Camera", currentFrame);
-                cv::waitKey(1);
-            }
-        }
     }
 
     void PhisicalCamera::shutdown() {
